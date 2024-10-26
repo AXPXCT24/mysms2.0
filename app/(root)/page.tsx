@@ -20,7 +20,7 @@ const Dashboard = () => {
             subtext="Access your MySMS account in this dashboard"
           />
         </header>
-        {/* <Separator className="bg-gray-300 h-px" /> */}
+        <Separator className="bg-gray-300 h-px" />
         <ScrollArea>
           <div className="flex max-lg:flex-col gap-4 mb-6">
             <HomeChart
