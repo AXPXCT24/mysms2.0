@@ -1,4 +1,5 @@
 import React from "react";
+import SmsSender from "./SmsSender";
 
 const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
   return (
@@ -22,7 +23,10 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
 
       <section className="banks">
         <div className="flex w-full justify-between">
-            <h2 className="header-2">Quick Actions</h2>
+          <h2 className="header-2">Quick Actions</h2>
+        </div>
+        <div className="flex flex-col w-full justify-between border border-gray-300 rounded-lg p-4">
+          <SmsSender />
         </div>
       </section>
     </aside>

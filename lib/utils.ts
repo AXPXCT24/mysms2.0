@@ -12,6 +12,11 @@ export const authFormSchema = z.object({
   password: z.string().min(8),
 })
 
+export const smsSenderSchema = z.object({
+  template_name: z.string().min(10),
+  content: z.string().min(50),
+})
+
 export function formatAmount(amount: number): string {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",

@@ -20,9 +20,9 @@ const RecentMessages = ({
 
       <Tabs defaultValue="Test" className="w-full">
         <TabsList className="recent-transactions-tablist">
-          <TabsTrigger value="Test"></TabsTrigger>
+          <TabsTrigger value="Outbox">Outbox</TabsTrigger>
         </TabsList>
-        <TabsContent value="Test" className="space-y-4">
+        <TabsContent value="Outbox" className="space-y-4">
           <MessagesTable />
         </TabsContent>
       </Tabs>
