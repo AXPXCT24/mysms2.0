@@ -13,8 +13,9 @@ export const authFormSchema = z.object({
 })
 
 export const smsSenderSchema = z.object({
-  template_name: z.string().min(10),
-  content: z.string().min(50),
+  gsm_number: z.number(),
+  number: z.string().min(10),
+  content: z.string().min(10),
 })
 
 export function formatAmount(amount: number): string {

@@ -24,9 +24,10 @@ import { Input } from "@/components/ui/input";
 import { smsSenderSchema } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import z, { number } from "zod";
 import { Textarea } from "./ui/textarea";
 import { Loader2 } from "lucide-react";
+import { SendSms } from "@/services/SmsServices";
 
 const SmsSender = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,17 +35,23 @@ const SmsSender = () => {
   const form = useForm<z.infer<typeof smsSenderSchema>>({
     resolver: zodResolver(smsSenderSchema),
     defaultValues: {
+      gsm_number: 0,
       content: "",
-      template_name: "",
+      number: "",
     },
   });
 
-  const onSubmit = (value: z.infer<typeof smsSenderSchema>) => {
+  const onSubmit = async (value: z.infer<typeof smsSenderSchema>) => {
     setIsLoading(true);
-
-    console.log(value);
-
-    setIsLoading(false);
+    try {
+      const res = await SendSms(value);
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -52,28 +59,25 @@ const SmsSender = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="template_name"
+          name="gsm_number"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Port</FormLabel>
               <FormControl>
-                <Select>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))} // Update the form state on value change
+                  value={field.value.toString()}
+                >
                   <SelectTrigger className="w-[220px] border-gray-300">
                     <SelectValue placeholder="Select Port" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-300">
                     <SelectGroup>
                       <SelectLabel>GSM Ports</SelectLabel>
-                      <SelectItem
-                        value="apple"
-                        className="hover:cursor-pointer"
-                      >
+                      <SelectItem value="16" className="hover:cursor-pointer">
                         Port 15
                       </SelectItem>
-                      <SelectItem
-                        value="banana"
-                        className="hover:cursor-pointer"
-                      >
+                      <SelectItem value="17" className="hover:cursor-pointer">
                         Port 16
                       </SelectItem>
                     </SelectGroup>
@@ -85,14 +89,17 @@ const SmsSender = () => {
           )}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
-          name="template_name"
+          name="number"
           render={({ field }) => (
             <FormItem>
               <FormLabel>SMS Template</FormLabel>
               <FormControl>
-                <Select>
+                <Select
+                  onValueChange={field.onChange} // Update the form state on value change
+                  value={field.value.toString()} // Set the selected value
+                >
                   <SelectTrigger className="w-[220px] border-gray-300">
                     <SelectValue placeholder="Select template" />
                   </SelectTrigger>
@@ -118,11 +125,11 @@ const SmsSender = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <FormField
           control={form.control}
-          name="template_name"
+          name="number"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Client Number</FormLabel>
@@ -157,12 +164,13 @@ const SmsSender = () => {
         />
         <div className="flex flex-col gap-4 mt-4">
           <Button type="submit" disabled={isLoading} className="form-btn">
-            {isLoading && (
+            {isLoading ? (
               <>
                 <Loader2 size={20} className="animate-spin" /> &nbsp; Loading...
               </>
+            ) : (
+              <>Send</>
             )}
-            Send
           </Button>
         </div>
       </form>

@@ -27,7 +27,7 @@ const MessagesTable = () => {
             <span className="text-s text-gray-700">16</span>
           </TableCell>
           <TableCell className="max-w-[110px] pl-2 pr-10">
-            <span className="text-s text-gray-700">+639335081867</span>
+            <span className="text-s text-gray-700">09335081867</span>
           </TableCell>
           <TableCell className="max-w-[400px] pl-2 pr-10">
             <span className="text-s text-gray-700">

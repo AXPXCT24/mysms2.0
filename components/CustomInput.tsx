@@ -1,16 +1,14 @@
-import React from 'react'
-import { FormControl, FormField, FormLabel, FormMessage } from './ui/form'
-import { Input } from './ui/input'
+import React from "react";
+import { FormControl, FormField, FormLabel, FormMessage } from "./ui/form";
+import { Input } from "./ui/input";
 
-import { Control, FieldPath } from 'react-hook-form'
-import { z } from 'zod'
-import { authFormSchema } from '@/lib/utils'
+import { Control } from "react-hook-form";
 
 interface CustomInput {
-  control: Control<any>,
-  name: string,
-  label: string,
-  placeholder: string
+  control: Control<any>;
+  name: string;
+  label: string;
+  placeholder: string;
 }
 
 const CustomInput = ({ control, name, label, placeholder }: CustomInput) => {
@@ -20,15 +18,13 @@ const CustomInput = ({ control, name, label, placeholder }: CustomInput) => {
       name={name}
       render={({ field }) => (
         <div className="form-item">
-          <FormLabel className="form-label">
-            {label}
-          </FormLabel>
+          <FormLabel className="form-label">{label}</FormLabel>
           <div className="flex w-full flex-col">
             <FormControl>
-              <Input 
+              <Input
                 placeholder={placeholder}
                 className="input-class"
-                type={name === 'password' ? 'password' : 'text'}
+                type={name === "password" ? "password" : "text"}
                 {...field}
               />
             </FormControl>
@@ -37,7 +33,7 @@ const CustomInput = ({ control, name, label, placeholder }: CustomInput) => {
         </div>
       )}
     />
-  )
-}
+  );
+};
 
-export default CustomInput
+export default CustomInput;
