@@ -24,10 +24,11 @@ import { Input } from "@/components/ui/input";
 import { smsSenderSchema } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z, { number } from "zod";
+import z from "zod";
 import { Textarea } from "./ui/textarea";
 import { Loader2 } from "lucide-react";
-import { SendSms } from "@/services/SmsServices";
+import { sendSms } from "@/services/SmsServices";
+import { toast } from "sonner";
 
 const SmsSender = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,14 +42,30 @@ const SmsSender = () => {
     },
   });
 
+  const { reset } = form;
+
   const onSubmit = async (value: z.infer<typeof smsSenderSchema>) => {
     setIsLoading(true);
+    const now = new Date();
+
     try {
-      const res = await SendSms(value);
+      const res = await sendSms(value);
       console.log(res);
+      if (res.response === "Success") {
+        reset();
+        toast("SMS: Sent Successfully", {
+          description: `Date: ${now.toISOString()}`,
+        });
+      } else {
+        toast("SMS: Sending Failed", {
+          description: `Date: ${now.toISOString()}`,
+        });
+      }
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
+      toast("SMS: Sending Failed", {
+        description: `Date: ${now.toISOString()}`,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +105,6 @@ const SmsSender = () => {
             </FormItem>
           )}
         />
-
         {/* <FormField
           control={form.control}
           name="number"
@@ -126,7 +142,6 @@ const SmsSender = () => {
             </FormItem>
           )}
         /> */}
-
         <FormField
           control={form.control}
           name="number"
@@ -144,7 +159,6 @@ const SmsSender = () => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="content"
@@ -169,7 +183,7 @@ const SmsSender = () => {
                 <Loader2 size={20} className="animate-spin" /> &nbsp; Loading...
               </>
             ) : (
-              <>Send</>
+              <> Send </>
             )}
           </Button>
         </div>

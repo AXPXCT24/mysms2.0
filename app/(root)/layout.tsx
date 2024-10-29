@@ -1,6 +1,7 @@
 import MobileNav from "@/components/MobileNav";
 import Sidebar from "@/components/Sidebar";
 import Image from "next/image";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -19,7 +20,8 @@ export default function RootLayout({
             <MobileNav user={loggedIn} />
           </div>
         </div>
-      {children}
+        {children}
+        <Toaster />
       </div>
     </main>
   );
