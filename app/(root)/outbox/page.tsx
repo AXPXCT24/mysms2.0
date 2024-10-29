@@ -1,29 +1,34 @@
-import { useEffect } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import HeaderBox from "@/components/HeaderBox";
 import { Separator } from "@/components/ui/separator";
-import MessagesTable from "@/components/MessagesTable";
 import { getSms } from "@/services/SmsServices";
+import RecentMessagesTable from "@/components/RecentMessagesTable";
+import { MessagesSchema } from "@/types/types";
 
 const Outbox = () => {
-  // useEffect(() => {
-  //   const messages = async () => {
-  //     const payload = {
-  //       filter: "msg_type",
-  //       params: "Outgoing",
-  //     };
+  const [outboxMessages, setOutboxMessages] = useState<MessagesSchema[]>([])
 
-  //     try {
-  //       const res = await getSms(payload);
-  //       if (res) {
-  //         console.log(res);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
+  useEffect(() => {
+    const messages = async () => {
+      const payload = {
+        filter: "msg_type",
+        params: "Outgoing",
+      };
 
-  //   messages();
-  // }, []);
+      try {
+        const res = await getSms(payload);
+        if (res.length !== 0) {
+          setOutboxMessages(res);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    messages();
+  }, []);
 
   return (
     <section className="home">
@@ -37,7 +42,7 @@ const Outbox = () => {
           />
         </header>
         <Separator className="bg-gray-300 h-px" />
-        <MessagesTable />
+        <RecentMessagesTable messages={outboxMessages}/>
       </div>
     </section>
   );

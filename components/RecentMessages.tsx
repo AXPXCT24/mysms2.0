@@ -1,14 +1,40 @@
-import Link from "next/link";
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MessagesTable from "./MessagesTable";
+"use client";
 
-const RecentMessages = ({
-  accounts,
-  transactions = [],
-  appwriteItemId,
-  page = 1,
-}: RecentTransactionsProps) => {
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import RecentMessagesTable from "./RecentMessagesTable";
+import { MessagesSchema } from "@/types/types";
+import { getSms } from "@/services/SmsServices";
+
+const RecentMessages = () => {
+  const [messageType, setMessageType] = useState("Incoming");
+  const [messages, setMessages] = useState<MessagesSchema[]>([]);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [messageType]);
+
+  const fetchMessages = async () => {
+    const payload = {
+      filter: "msg_type",
+      params: messageType,
+      limit: 5,
+    };
+
+    try {
+      const res = await getSms(payload);
+      if (res.length !== 0) {
+        console.log(res);
+        setMessages(res);
+      } else {
+        setMessages([]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <section className="recent-transactions">
       <header className="flex items-center justify-between">
@@ -20,10 +46,21 @@ const RecentMessages = ({
 
       <Tabs defaultValue="Test" className="w-full">
         <TabsList className="recent-transactions-tablist">
-          <TabsTrigger value="Outbox">Outbox</TabsTrigger>
+          <TabsTrigger
+            value="Outbox"
+            onClick={() => setMessageType("Outgoing")}
+          >
+            Outbox
+          </TabsTrigger>
+          <TabsTrigger value="Inbox" onClick={() => setMessageType("Incoming")}>
+            Inbox
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="Outbox" className="space-y-4">
-          <MessagesTable />
+          <RecentMessagesTable messages={messages} />
+        </TabsContent>
+        <TabsContent value="Inbox" className="space-y-4">
+          <RecentMessagesTable messages={messages} />
         </TabsContent>
       </Tabs>
     </section>

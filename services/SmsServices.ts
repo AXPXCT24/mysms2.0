@@ -22,6 +22,7 @@ export async function sendSms(payload: z.infer<typeof smsSenderSchema>) {
   }
 }
 
+// for fetching messages. For inbox: set params to Incoming, Outgoing for outbox.
 export async function getSms(filters: SmsFilters) {
   const { filter, params, limit = 10 } = filters;
   try {
