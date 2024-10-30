@@ -44,22 +44,22 @@ const RecentMessages = () => {
         </Link>
       </header>
 
-      <Tabs defaultValue="Test" className="w-full">
+      <Tabs defaultValue="Inbox" className="w-full">
         <TabsList className="recent-transactions-tablist">
+          <TabsTrigger value="Inbox" onClick={() => setMessageType("Incoming")}>
+            Inbox
+          </TabsTrigger>
           <TabsTrigger
             value="Outbox"
             onClick={() => setMessageType("Outgoing")}
           >
             Outbox
           </TabsTrigger>
-          <TabsTrigger value="Inbox" onClick={() => setMessageType("Incoming")}>
-            Inbox
-          </TabsTrigger>
         </TabsList>
-        <TabsContent value="Outbox" className="space-y-4">
+        <TabsContent value="Inbox" className="space-y-4">
           <RecentMessagesTable messages={messages} />
         </TabsContent>
-        <TabsContent value="Inbox" className="space-y-4">
+        <TabsContent value="Outbox" className="space-y-4">
           <RecentMessagesTable messages={messages} />
         </TabsContent>
       </Tabs>

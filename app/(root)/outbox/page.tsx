@@ -8,27 +8,27 @@ import RecentMessagesTable from "@/components/RecentMessagesTable";
 import { MessagesSchema } from "@/types/types";
 
 const Outbox = () => {
-  const [outboxMessages, setOutboxMessages] = useState<MessagesSchema[]>([])
+  const [outboxMessages, setOutboxMessages] = useState<MessagesSchema[]>([]);
 
   useEffect(() => {
-    const messages = async () => {
-      const payload = {
-        filter: "msg_type",
-        params: "Outgoing",
-      };
-
-      try {
-        const res = await getSms(payload);
-        if (res.length !== 0) {
-          setOutboxMessages(res);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
     messages();
   }, []);
+
+  const messages = async () => {
+    const payload = {
+      filter: "msg_type",
+      params: "Outgoing",
+    };
+
+    try {
+      const res = await getSms(payload);
+      if (res.length !== 0) {
+        setOutboxMessages(res);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <section className="home">
@@ -42,7 +42,7 @@ const Outbox = () => {
           />
         </header>
         <Separator className="bg-gray-300 h-px" />
-        <RecentMessagesTable messages={outboxMessages}/>
+        <RecentMessagesTable messages={outboxMessages} />
       </div>
     </section>
   );
